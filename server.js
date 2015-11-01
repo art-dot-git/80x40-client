@@ -23,7 +23,7 @@ var addToQueue = (() => {
     
     const process = () => {
         if (!isRunning && queue.length > 0)
-            process(process);
+            processNext(process);
     };
     
     return (k) => {
