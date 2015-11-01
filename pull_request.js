@@ -36,7 +36,7 @@ const onMergeError = (github, pullRequest, err, f) => {
             user: config.user,
             repo: config.repo,
             number: pullRequest.number,
-            body: "**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request.\n---------------------\n\n" + err,
+            body: "**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request.\n\n---------------------\n\n" + err,
             }, f);
     } else {
         f(err);
