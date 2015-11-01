@@ -31,12 +31,13 @@ const isTextBlockGood = (text) => {
     Handle pull request merge error.
 */
 const onMergeError = (github, pullRequest, err, f) => {
+    const repoUrl = pullRequest.repository.html_url;
     if (POST_COMMENTS) {
         return github.issues.createComment({
             user: config.user,
             repo: config.repo,
             number: pullRequest.number,
-            body: "**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request.\n\n---------------------\n\n" + err,
+            body: `**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request\n\nIf this appears to be a system issue, [please open a bug](${repoUrl}/issues).\n\n---------------------\n\n${err}`,
             }, f);
     } else {
         f(err);
