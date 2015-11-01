@@ -1,8 +1,9 @@
 "use strict";
 const GitHubApi = require("github");
-const program = require("commander")
+const program = require("commander");
 const escapeRegexp = require('escape-string-regexp');
 const express = require('express');
+const bodyParser = require('body-parser');
 
 
 const config = require('./config');
@@ -158,6 +159,8 @@ github.authenticate({
 processAllPullRequests();
 
 var app = express();
+app.use(bodyParser.json());
+
 app.post('/', (req, res) => {
     console.log(req.body);
     res.send('');
