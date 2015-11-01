@@ -38,8 +38,9 @@ const onMergeError = (github, pullRequest, err, f) => {
             number: pullRequest.number,
             body: "**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request.\n---------------------\n\n" + err,
             }, f);
+    } else {
+        f(err);
     }
-    f && f(err);
 };
 
 /**
