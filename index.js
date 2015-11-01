@@ -158,7 +158,7 @@ github.authenticate({
 processAllPullRequests();
 
 var app = express();
-app.get('/80x40-client', (req, res) => {
+app.get('/', (req, res) => {
     console.log(req);
     res.send('');
 });
