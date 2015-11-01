@@ -8,7 +8,7 @@ const pathToRepo = require("path").resolve(config.local_repository);
 const simpleGit = require('simple-git')(pathToRepo);
 
 /// Should error attempt to post error comments back to github.
-const POST_COMMENTS = true;
+const POST_COMMENTS = truegit p;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
 
@@ -44,8 +44,8 @@ const onMergeError = (github, pullRequest, err, f) => {
 
 /**
 */
-const deleteBranch = (name, f) =>
-    simpleGit._run(['branch', '-D', name], f);
+const deleteBranch = (name, k) =>
+    simpleGit._run(['branch', '-D', name], k);
 
 /**
 */
@@ -101,7 +101,7 @@ const tryMergePullRequest = (request, f) => {
 /**
     Process a single pull request
 */
-const processPullRequest = (github, request, f) =>
+const processPullRequest = (github, request, k) =>
     tryMergePullRequest(request, (err, data) => {
         if (err)
             return onMergeError(github, request, err, _ => k(err));
