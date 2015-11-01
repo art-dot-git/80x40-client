@@ -36,7 +36,8 @@ To set this up, in the target 80x40 repo edit the `.git/config` file and add fol
     driver = PATH_TO_80x40_CLIENT_REPO/merger/merger %O %A %B %L
 ```
 
-## Configuration
-All components are configured in `config.json`.
+## Setting up 80x40
+Configuration options are stored in in `config.json`.
 
 For most cases, just change `local_repository` to point at where 80x40 is stored on your local computer. `user` and `repo` can also be changed to target a different repository on Github.
+
