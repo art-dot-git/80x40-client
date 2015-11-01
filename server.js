@@ -61,7 +61,7 @@ const webhookHandler = require('github-webhook-handler')({
 
 webhookHandler.on('pull_request', (event) => {
     const action = event.payload.action;
-    if (action !== 'opened' && action !== 'synchronize') {
+    if (action !== 'opened' && action !== 'synchronize' && action !== 'reopened') {
         console.log('ignoring action', action);
         return;
     }
