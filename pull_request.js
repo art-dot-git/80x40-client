@@ -32,7 +32,7 @@ const isTextBlockGood = (text) => {
 */
 const onMergeError = (github, pullRequest, err, f) => {
     if (POST_COMMENTS) {
-        github.issues.createComment({
+        return github.issues.createComment({
             user: config.user,
             repo: config.repo,
             number: pullRequest.number,
