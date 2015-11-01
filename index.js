@@ -16,6 +16,7 @@ const github = new GitHubApi({
 
 program
     .version('0.0.0')
+    .option('--number <number>', 'Pull request to process')
     .option('--token <token>', 'Github user token')
     .parse(process.argv);
 
@@ -24,7 +25,19 @@ github.authenticate({
     token: program.token
 });
 
-main.handlePullRequest(github, conf.user, conf.repo, (err) => {
+if (program.number) {
+    main.handlePullRequest(github, conf.user, conf.repo, program.number,
+        (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("OK");
+            }
+        });
+    return;
+}
+
+main.handlePullRequests(github, conf.user, conf.repo, (err) => {
     if (err) {
         console.error(err);
     } else {

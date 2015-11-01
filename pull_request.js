@@ -8,7 +8,7 @@ const pathToRepo = require("path").resolve(config.local_repository);
 const simpleGit = require('simple-git')(pathToRepo);
 
 /// Should error attempt to post error comments back to github.
-const POST_COMMENTS = false;
+const POST_COMMENTS = true;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
 
