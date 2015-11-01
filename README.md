@@ -1,6 +1,6 @@
 # 80x40 Client
 
-Simple scripts used to automatically update [80x40](https://github.com/git-dot-art/80x40).
+Simple scripts used to automatically update [80x40](https://github.com/git-dot-art/80x40). 
 
 ## Components
 
