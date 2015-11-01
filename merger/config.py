@@ -17,7 +17,7 @@ EXPECTED_WIDTH = data['expected_width']
 EXPECTED_HEIGHT = data['expected_height']
 
 # Characters allowed in the block
-ALLOWED_CHARS = data['allowed_chars']'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+ALLOWED_CHARS = data['allowed_chars']
 
 REPO_PATH = os.path.join(_root, data['local_repository'])
 
