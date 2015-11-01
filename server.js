@@ -37,7 +37,8 @@ webhookHandler.on('pull_request', (event) => {
         console.log('ignoring action', action);
         return;
     }
-	main.handlePullRequest(github, conf.user, conf.repo, event.payload.number,
+	main.handlePullRequest(github, config.user, config.repo,
+	    event.payload.number,
 	    (err) => {
             if (err) {
                 console.error(err);
