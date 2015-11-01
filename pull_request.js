@@ -12,6 +12,8 @@ const POST_COMMENTS = true;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
 
+const REPO_URL = `https://github.com/${config.user}/${config.repo}`;
+
 /**
     Validate that a block of text is correctly formatted.  
 */
@@ -31,13 +33,12 @@ const isTextBlockGood = (text) => {
     Handle pull request merge error.
 */
 const onMergeError = (github, pullRequest, err, f) => {
-    const repoUrl = pullRequest.repository.html_url;
     if (POST_COMMENTS) {
         return github.issues.createComment({
             user: config.user,
             repo: config.repo,
             number: pullRequest.number,
-            body: `**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request\n\nIf this appears to be a system issue, [please open a bug](${repoUrl}/issues).\n\n---------------------\n\n${err}`,
+            body: `**AUTO MERGE ERROR**\nPlease try correcting the error below and updating the pull request\n\nIf this appears to be a system issue, [please open a bug](${REPO_URL}/issues).\n\n---------------------\n\n${err}`,
             }, f);
     } else {
         f(err);
