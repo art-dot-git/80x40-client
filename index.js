@@ -158,8 +158,8 @@ github.authenticate({
 processAllPullRequests();
 
 var app = express();
-app.get('/', (req, res) => {
-    console.log(req);
+app.post('/', (req, res) => {
+    console.log(req.body);
     res.send('');
 });
 
