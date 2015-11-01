@@ -76,8 +76,13 @@ const tryMergePullRequest = (request, f) => {
     
     console.log('Processing ' + sha);
     
+    if (!other.otherBranch.match(/[a-z0-9\-_]/i)) {
+        return f("Invalid branch name");
+    }
+    
     return verifyBranchMerge(
-        simpleGit.checkoutLocalBranch(branchName)
+        simpleGit
+            .checkoutLocalBranch(branchName)
             .pull(otherCloneUrl, otherBranch)
             .checkout('master'),
         branchName,
