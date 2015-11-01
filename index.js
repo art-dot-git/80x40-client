@@ -158,17 +158,28 @@ github.authenticate({
 
 processAllPullRequests();
 
-var app = express();
+const webhookHandler = require('github-webhook-handler')({
+    path: '/',
+    secret: program.secret
+});
+
+webhookHandler.on('pull_request', (event) => {
+	console.log(event)
+});
+
+const app = express();
 app.use(bodyParser.json());
 
 app.post('/', (req, res) => {
-    console.log(req.body);
-    res.send('');
+    webhookHandler(req, res, (err) => {
+        res.send('');
+    });
 });
 
 var server = app.listen(3000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('Listening at http://%s:%s', host, port);
 });
+

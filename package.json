@@ -16,6 +16,7 @@
         "commander": "2.0.x",
         "escape-string-regexp": "1.0.x",
 	"express": "4.13.x",
-	"body-parser": "1.14.x"
+	"body-parser": "1.14.x",
+	"github-webhook-handler": "0.5.x"
     }
 }
