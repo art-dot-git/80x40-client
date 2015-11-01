@@ -4,8 +4,8 @@
     "allowed_chars": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=<>,./?\\;:'\"[]{}| ",
     
     "file_name" : "README",
-    "local_repository": "../80x40-test",
+    "local_repository": "../80x40",
     
-    "user": "git-dot-art",
-    "repo": "80x40-test"
+    "user": "art-dot-git",
+    "repo": "80x40"
 }
