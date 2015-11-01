@@ -1,9 +1,8 @@
 "use strict";
 const GitHubApi = require("github");
 const program = require("commander");
-const escapeRegexp = require('escape-string-regexp');
-const express = require('express');
-const bodyParser = require('body-parser');
+const http = require('http');
+
 
 
 const config = require('./config');
@@ -167,12 +166,10 @@ webhookHandler.on('pull_request', (event) => {
 	console.log(event)
 });
 
-const app = express();
-app.use(bodyParser.json());
-
-app.post('/', (req, res) => {
+http.createServer(function (req, res) {
     webhookHandler(req, res, (err) => {
-        res.send('');
+        res.statusCode = 404
+        res.end('');
     });
 });
 
