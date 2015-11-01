@@ -26,7 +26,7 @@ github.authenticate({
 });
 
 if (program.number) {
-    main.handlePullRequest(github, conf.user, conf.repo, program.number,
+    main.handlePullRequest(github, config.user, config.repo, program.number,
         (err) => {
             if (err) {
                 console.error(err);
@@ -37,7 +37,7 @@ if (program.number) {
     return;
 }
 
-main.handlePullRequests(github, conf.user, conf.repo, (err) => {
+main.handlePullRequests(github, config.user, config.repo, (err) => {
     if (err) {
         console.error(err);
     } else {
