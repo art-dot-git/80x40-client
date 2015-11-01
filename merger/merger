@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+# Custom Merger for blocks of characters.
+#
+# Computes difference between other file and common ancestor file and blits
+# the changes over the existing file.
+
+import block
+import sys
+
+def open_array_file(path):
+    """
+    Open the file holding text array.
+    Converts contents to 2d array.
+    """
+    with open(path, 'r') as f:
+        return [list(x.rstrip('\n')) for x in f.readlines()]
+
+ancestor = open_array_file(sys.argv[1])
+current = open_array_file(sys.argv[2])
+other = open_array_file(sys.argv[3])
+
+if not block.is_good(other):
+    print("New block is not valid.")
+    sys.exit(1)
+
+try:
+    changes = block.get_difference(ancestor, other)
+    merged = block.apply_changes(current, changes)
+    
+    if not block.is_good(merged):
+        print("Merged block is not valid.")
+        sys.exit(1)
+    
+    with open(sys.argv[2], 'w') as f:
+        f.write(block.merge_to_string(merged))
+
+    sys.exit(1)
+except StandardError as e:
+    print(e)
+    sys.exit(1)

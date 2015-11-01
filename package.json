@@ -1,0 +1,20 @@
+{
+    "name": "80x40-client",
+    "version": "0.0.0",
+    "description": "80x40 client",
+    "author": "Matt Bierner",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/git-dot-art/80x40-client.git"
+    },
+    
+    "main": "index.js",
+    "dependencies": {
+        "github": "0.2.x",
+        "simple-git": "1.11.x",
+        "commander": "2.0.x",
+        "escape-string-regexp": "1.0.x",
+	"express": "4.13.x"
+    }
+}

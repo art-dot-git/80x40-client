@@ -1,3 +1,11 @@
-80x40 Client
+# 80x40 Client
 
-Simple node client app that converts github webhook pull requests into a websocket for use with 80x40.
+Simple scripts used to automatically update 80x40.
+
+## Components
+
+### 80x40 Merger - `merger/merger`
+Git merger for blocks of text. Written in Python.
+
+### Node Client
+node.js 
