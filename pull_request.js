@@ -76,7 +76,7 @@ const tryMergePullRequest = (request, f) => {
     
     console.log('Processing ' + sha);
     
-    if (!other.otherBranch.match(/[a-z0-9\-_]/i)) {
+    if (!otherBranch.match(/[a-z0-9\-_]/i)) {
         return f("Invalid branch name");
     }
     
