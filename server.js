@@ -5,7 +5,7 @@
 const GitHubApi = require("github");
 const program = require("commander");
 const http = require('http');
-const main = require('./index');
+const main = require('./pull_request');
 const config = require('./config');
 
 const github = new GitHubApi({
@@ -15,16 +15,16 @@ const github = new GitHubApi({
 	}
 });
 
-github.authenticate({
-    type: "oauth",
-    token: program.token
-});
-
 program
     .version('0.0.0')
     .option('--token <token>', 'Github user token')
     .option('--secret <secret>', 'Github hook secret')
     .parse(process.argv);
+
+github.authenticate({
+    type: "oauth",
+    token: program.token
+});
 
 const webhookHandler = require('github-webhook-handler')({
     path: '/',
@@ -35,7 +35,14 @@ webhookHandler.on('pull_request', (event) => {
     const action = event.payload.action;
     if (action !== 'opened' || action !== 'synchronize')
         return;
-	main.handlePullRequest(github, conf.user, conf.repo, event.payload.number);
+	main.handlePullRequest(github, conf.user, conf.repo, event.payload.number,
+	    (err) => {
+            if (err) {
+                console.error(err);
+            } else {
+                console.log("OK");
+            }
+        });
 });
 
 http.createServer(function (req, res) {
