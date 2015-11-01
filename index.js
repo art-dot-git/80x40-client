@@ -1,6 +1,7 @@
 "use strict";
 const GitHubApi = require("github");
 const program = require("commander");
+const escapeRegexp = require('escape-string-regexp');
 const http = require('http');
 
 
