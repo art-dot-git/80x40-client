@@ -1,7 +1,7 @@
 {
     "expected_width": 80,
     "expected_height": 40,
-    "allowed_chars": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=<>,./?\\;:'\"[]{}| ",
+    "allowed_chars": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+=<>,./?\\;:'\"[]{}| ~`",
     
     "file_name" : "README",
     "local_repository": "../80x40",
