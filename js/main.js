@@ -2,7 +2,7 @@
 
 var REPO_USER = "art-dot-git";
 
-var REPO = "80x40-test";
+var REPO = "80x40";
 
 var FILE = "README";
 
