@@ -61,13 +61,23 @@ const verifyBranchMerge = (instance, branchName, f) =>
             return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).", null);
         }
         simpleGit.show([branchName + ':' + config.file_name], (err, data) => {
-            if (isTextBlockGood(data)) {
+            if (!err && isTextBlockGood(data)) {
                 return f(null)
             } else {
                 return f("Text block is invalid. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).");
             }
         });
     });
+
+const cleanUpBranch = (branchName, k) =>
+    simpleGit
+        .checkout('HEAD^')
+        ._run(['checkout', '-f', 'master'], (err, data) => {
+            if (err) {
+                return k(err);
+            }
+            return deleteBranch(branchName, k);
+        });
 
 /**
 */
@@ -82,31 +92,34 @@ const tryMergePullRequest = (request, f) => {
     if (!otherBranch.match(/[a-z0-9\-_]/i)) {
         return f("Invalid branch name");
     }
-    
-    return verifyBranchMerge(
-        simpleGit
-            .checkoutLocalBranch(branchName)
-            .pull(otherCloneUrl, otherBranch)
-            .checkout('master'),
-        branchName,
-        function(err, data) {
-            console.log("pre merge", err);
-            if (err) {
-                return deleteBranch(branchName, _ => f(err));
-            }
-            
-            return simpleGit._run(['merge', '-m "Automerge: ' + sha + '"', 'master', branchName], function(err, data) {
-            console.log("post merge", err);
-
-            return deleteBranch(branchName, _ => {
-                console.log("pre push", err);
+    return simpleGit._run(['checkout', '-B', branchName], (err, data) => {
+        if (err) {
+            return f(err);
+        }
+        return verifyBranchMerge(
+            simpleGit
+                .pull(otherCloneUrl, otherBranch)
+                .checkout('master'),
+            branchName,
+            function(err, data) {
+                console.log("pre merge", err);
                 if (err) {
-                    return f(err);
+                    return cleanUpBranch(branchName, _ => f(err));
                 }
-                return simpleGit.push('origin', 'master', (err, data) => {
-                    console.log("post push", err);
-                    return f(err, data);
-                })
+            
+                return simpleGit._run(['merge', '-m "Automerge: ' + sha + '"', 'master', branchName], function(err, data) {
+                console.log("post merge", err);
+
+                return cleanUpBranch(branchName, _ => {
+                    console.log("pre push", err);
+                    if (err) {
+                        return f(err);
+                    }
+                    return simpleGit.push('origin', 'master', (err, data) => {
+                        console.log("post push", err);
+                        return f(err, data);
+                    })
+                });
             });
         });
     });
@@ -131,7 +144,7 @@ const processPullRequests = (github, requests, k) => {
     
     processPullRequest(github, requests[0], (err, data) => {
         const rest = requests.slice(1);
-        return processRequests(github, rest, err ? _ => k(err) : k);
+        return processPullRequests(github, rest, err ? _ => k(err) : k);
     });
 };
 

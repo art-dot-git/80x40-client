@@ -25,22 +25,17 @@ github.authenticate({
     token: program.token
 });
 
-if (program.number) {
-    main.handlePullRequest(github, config.user, config.repo, program.number,
-        (err) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("OK");
-            }
-        });
-    return;
-}
-
-main.handlePullRequests(github, config.user, config.repo, (err) => {
+const logResult = (err) => {
     if (err) {
         console.error(err);
     } else {
         console.log("OK");
     }
-});
+};
+
+if (program.number) {
+    main.handlePullRequest(github, config.user, config.repo, program.number,
+        logResult);
+} else {
+    main.handleAllPullRequests(github, config.user, config.repo, logResult);
+}
