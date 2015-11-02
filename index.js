@@ -27,7 +27,7 @@ github.authenticate({
 
 const logResult = (err) => {
     if (err) {
-        console.error(err);
+        console.error("ERROR", err);
     } else {
         console.log("OK");
     }
