@@ -36,17 +36,19 @@ a:hover {
 /* Page Header
  -----------------------------------------------------------------------------*/
 #header {
-   font-family: 'Inconsolata';
-   
+   font-family: Consolas, 'Inconsolata', monospace;
    padding-bottom: 1.4rem;
 }
 
 #header #text-block {
-    font-family: 'Inconsolata', monospace;
+    font-family: Consolas, 'Inconsolata', monospace;
     font-size: 12px;
     line-height: 12px;
     white-space: nowrap;
     overflow: hidden;
+    color: #777;
+    background: none;
+    border: none;
 }
 
 #header #controls button {
@@ -76,7 +78,7 @@ article {
 
 article h2 {
    text-align: center;
-    font-family: 'Inconsolata';
+    font-family: Consolas, 'Inconsolata', monospace;
     font-size: 1.4em;
 }
 
@@ -90,7 +92,7 @@ article h2 {
 /* footer
  -----------------------------------------------------------------------------*/
 #page-footer {
-    font-family: 'Inconsolata', monospace;
+    font-family: Consolas, 'Inconsolata', monospace;
     margin-top: 4rem;
     margin-bottom: 5rem;
     color: #ccc;

@@ -25,9 +25,7 @@ var splitTextBlock = function(text) {
 };
 
 var updateTextBlock = function(block) {
-    $('#text-block').empty().append(block.map(function(x) {
-        return $('<span></span>').text(x).append('<br/>');
-    }));
+    $('#text-block code').text(block.join('\n'));
 };
 
 var getTextBlock = function(revision, f) {
