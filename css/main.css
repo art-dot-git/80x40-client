@@ -1,0 +1,142 @@
+@import url(https://fonts.googleapis.com/css?family=Inconsolata);
+
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+    box-sizing: border-box;
+    min-width: 500px;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    color: #444;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+}
+
+.ul {
+    text-decoration: underline;
+}
+
+a {
+    color: #0091ff;
+}
+
+a:hover {
+    color: #0091ff;
+}
+
+/* Page Header
+ -----------------------------------------------------------------------------*/
+#header {
+   font-family: 'Inconsolata';
+   
+   padding-bottom: 1.4rem;
+}
+
+#header #text-block {
+    font-family: 'Inconsolata', monospace;
+    font-size: 12px;
+    line-height: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+#header #controls button {
+    font-size: 1em;
+    border: 0; 
+    background: 0;
+}
+
+#header #controls button:hover {
+    text-decoration: underline;
+}
+
+#header #controls button:disabled {
+    text-decoration: none;
+    color: #aaa;
+}
+
+/* Article
+ -----------------------------------------------------------------------------*/
+article {
+    text-align: left;
+    margin-top: 0.4em;
+    font-family: sans-serif;
+    max-width: 450px;
+    text-align: justify;
+}
+
+article h2 {
+   text-align: center;
+    font-family: 'Inconsolata';
+    font-size: 1.4em;
+}
+
+#links {
+    text-align: center;
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+/* footer
+ -----------------------------------------------------------------------------*/
+#page-footer {
+    font-family: 'Inconsolata', monospace;
+    margin-top: 4rem;
+    margin-bottom: 5rem;
+    color: #ccc;
+} 
+
+#page-footer a {
+    color: inherit;
+}
+
+#page-footer nav {
+    padding-bottom: 1.6em;
+}
+
+@media (max-height: 600px) {
+    article {
+        margin-top: 0;
+    }
+    
+    article h2,
+    article h3 {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    article h4 {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (min-height: 900px) {
+    #header #title-left {
+        padding-right: 150px;
+    }
+
+    #header #title-right {
+        padding-left: 150px;
+    }
+}
+
+@media (max-width: 500px) {
+    article figure {
+        margin: 0 auto;
+        float: none;
+        text-align: center;
+    }
+
+
+}
