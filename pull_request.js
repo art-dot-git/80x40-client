@@ -3,7 +3,7 @@ const program = require("commander");
 const escapeRegexp = require('escape-string-regexp');
 
 const config = require('./config');
-const pathToRepo = require("path").resolve(config.local_repository);
+const pathToRepo = require("path").join(__dirname, config.local_repository);
 
 const simpleGit = require('simple-git')(pathToRepo);
 
@@ -58,13 +58,13 @@ const verifyBranchMerge = (instance, branchName, f) =>
         
         const files = data.trim();
         if (files !== config.file_name && files.length !== 0) {
-            return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md)", null);
+            return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).", null);
         }
         simpleGit.show([branchName + ':' + config.file_name], (err, data) => {
             if (isTextBlockGood(data)) {
                 return f(null)
             } else {
-                return f("Text block is invalid. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md)");
+                return f("Text block is invalid. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).");
             }
         });
     });
@@ -90,17 +90,23 @@ const tryMergePullRequest = (request, f) => {
             .checkout('master'),
         branchName,
         function(err, data) {
+            console.log("pre merge", err);
             if (err) {
                 return deleteBranch(branchName, _ => f(err));
             }
             
             return simpleGit._run(['merge', '-m "Automerge: ' + sha + '"', 'master', branchName], function(err, data) {
-            
+            console.log("post merge", err);
+
             return deleteBranch(branchName, _ => {
+                console.log("pre push", err);
                 if (err) {
                     return f(err);
                 }
-                return simpleGit.push('origin', 'master', f)
+                return simpleGit.push('origin', 'master', (err, data) => {
+                    console.log("post push", err);
+                    return f(err, data);
+                })
             });
         });
     });
