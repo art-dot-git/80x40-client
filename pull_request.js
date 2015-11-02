@@ -58,13 +58,13 @@ const verifyBranchMerge = (instance, branchName, f) =>
         
         const files = data.trim();
         if (files !== config.file_name && files.length !== 0) {
-            return f("Change must only touch README. [See guidelines](https://github.com/git-dot-art/80x40/blob/master/about.md)", null);
+            return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md)", null);
         }
         simpleGit.show([branchName + ':' + config.file_name], (err, data) => {
             if (isTextBlockGood(data)) {
                 return f(null)
             } else {
-                return f("Text block is invalid. [See guidelines](https://github.com/git-dot-art/80x40/blob/master/about.md)");
+                return f("Text block is invalid. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md)");
             }
         });
     });
