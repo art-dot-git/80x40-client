@@ -69,6 +69,9 @@ const verifyBranchMerge = (instance, branchName, f) =>
         });
     });
 
+const forceCheckoutMaster = (k) =>
+    simpleGit._run(['checkout', '-f', 'master'], k);
+
 const cleanUpBranch = (branchName, k) =>
     simpleGit
         .checkout('HEAD^')
@@ -92,7 +95,8 @@ const tryMergePullRequest = (request, f) => {
     if (!otherBranch.match(/[a-z0-9\-_]/i)) {
         return f("Invalid branch name");
     }
-    return simpleGit._run(['checkout', '-B', branchName], (err, data) => {
+    return forceCheckoutMaster(x => 
+        simpleGit._run(['checkout', '-B', branchName], (err, data) => {
         if (err) {
             return f(err);
         }
@@ -122,7 +126,7 @@ const tryMergePullRequest = (request, f) => {
                 });
             });
         });
-    });
+    }));
 };
 
 /**
