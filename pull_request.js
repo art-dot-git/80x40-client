@@ -144,7 +144,8 @@ const tryMergePullRequest = (request, f) => {
         return f("Invalid branch name");
     }
     
-    return getUpdatedBranch(branchName, otherCloneUrl, otherBranch, err => {
+    return getUpdatedBranch(branchName, otherCloneUrl, otherBranch, (err, data) => {
+        console.log("Post branch update", err, data);
         if (err) {
             return f(err);
         }
