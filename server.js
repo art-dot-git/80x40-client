@@ -11,7 +11,7 @@ const seqqueue = require('seq-queue');
 const config = require('./config');
 
 // Pull request actions to process
-const pullRequestActions = ['opened', 'synchronize'];
+const pullRequestActions = ['opened', 'synchronize', 'reopened'];
 
 const taskQueue = seqqueue.createQueue(30000);
 

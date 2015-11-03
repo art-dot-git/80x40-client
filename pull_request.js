@@ -52,15 +52,20 @@ const deleteBranch = (name, k) =>
 
 /**
 */
-const verifyBranchMerge = (instance, branchName, f) =>
+const verifyBranchMerge = (instance, branchName, f) => {
+    console.log("Pre verify merge", branchName);
     instance._run(['diff', '--name-only', branchName], function(err, data) {
+        console.log("Post verify diff", branchName, err);
+
         if (err) return f(err);
         
         const files = data.trim();
         if (files !== config.file_name && files.length !== 0) {
             return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).", null);
         }
-        simpleGit.show([branchName + ':' + config.file_name], (err, data) => {
+        simpleGit._run(['show', branchName + ':' + config.file_name], (err, data) => {
+            console.log("Post verify show", branchName, err);
+
             if (!err && isTextBlockGood(data)) {
                 return f(null)
             } else {
@@ -68,6 +73,7 @@ const verifyBranchMerge = (instance, branchName, f) =>
             }
         });
     });
+}
 
 const forceCheckoutMaster = (k) =>
     simpleGit._run(['checkout', '-f', 'master'], k);
@@ -78,8 +84,9 @@ const cleanUpBranch = (branchName, k) =>
         ._run(['checkout', '-f', 'master'], (err, data) => {
             if (err) {
                 return k(err);
+            } else {
+                return deleteBranch(branchName, k);
             }
-            return deleteBranch(branchName, k);
         });
 
 /**
@@ -134,9 +141,11 @@ const tryMergePullRequest = (request, f) => {
 */
 const processPullRequest = (github, request, k) =>
     tryMergePullRequest(request, (err, data) => {
-        if (err)
-            return onMergeError(github, request, err, _ => k(err));
-        return k(null);
+        if (err) {
+            onMergeError(github, request, err, _ => k(err));
+        } else {
+            k(err, data);
+        }
     });
 
 /**
