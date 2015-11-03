@@ -8,7 +8,7 @@ const pathToRepo = require("path").join(__dirname, config.local_repository);
 const simpleGit = require('simple-git')(pathToRepo);
 
 /// Should error attempt to post error comments back to github.
-const POST_COMMENTS = true;
+const POST_COMMENTS = false;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
 
@@ -102,6 +102,7 @@ const getUpdatedBranch = (branchName, cloneUrl, k) =>
         if (err) {
             k(err);
         } else {
+            console.log("Checking out", branchName, cloneUrl);
             simpleGit._run(['checkout', '-f', '-B', branchName], (err) => {
                 if (err) {
                     k(err);
