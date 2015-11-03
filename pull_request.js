@@ -11,6 +11,7 @@ const simpleGit = require('simple-git')(pathToRepo);
 const POST_COMMENTS = true;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
+console.log(LINE_REGEXP);
 
 const REPO_URL = `https://github.com/${config.user}/${config.repo}`;
 const ABOUT_URL = `${REPO_URL}/blob/master/about.md`;
@@ -97,7 +98,7 @@ const cleanUpBranch = (branchName, k) =>
 /**
     Attempt to update a branch with the latest changes.
 */
-const getUpdatedBranch = (branchName, cloneUrl, cloneBranch, k) =>
+const getUpdatedBranch = (sha, branchName, cloneUrl, cloneBranch, k) =>
     forceCheckout('master', err => {
         if (err) {
             k(err);
@@ -113,7 +114,7 @@ const getUpdatedBranch = (branchName, cloneUrl, cloneBranch, k) =>
                         if (err) {
                             simpleGit
                                 .add(config.file_name)
-                                ._run(['commit', '-am', "test"], e => k(e ? err : null));
+                                ._run(['commit', '-am', `"merge${sha}"`], e => k(e ? err : null));
                         } else {
                             k(err);
                         }
@@ -152,7 +153,7 @@ const tryMergePullRequest = (request, f) => {
         return f("Invalid branch name");
     }
     
-    return getUpdatedBranch(branchName, otherCloneUrl, otherBranch, (err, data) => {
+    return getUpdatedBranch(sha, branchName, otherCloneUrl, otherBranch, (err, data) => {
         console.log("Post branch update", err, data);
         if (err) {
             return f(err);
