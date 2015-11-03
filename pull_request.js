@@ -121,11 +121,11 @@ const tryMergeBranch = (branchName, k) =>
     verifyBranchMerge(simpleGit, branchName, (err, data) => {
         console.log("Pre merge", err);
         if (err) {
-            return f(err);
+            return k(err);
         } else {
             return simpleGit._run(['merge', '-m "Automerge: ' + branchName + '"', branchName], (err, data) => {
                 console.log("Post merge", err);
-                f(err, data);
+                k(err, data);
             });
         }
     });
