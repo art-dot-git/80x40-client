@@ -109,7 +109,13 @@ const getUpdatedBranch = (branchName, cloneUrl, cloneBranch, k) =>
                 if (err) {
                     k(err);
                 } else { 
-                    simpleGit._run(['pull', '--commit', cloneUrl, cloneBranch], k);
+                    simpleGit._run(['pull', cloneUrl, cloneBranch], (err) => {
+                        if (err) {
+                            simpleGit.add(config.file_name, k);
+                        } else {
+                            k(err);
+                        }
+                    });
                 }
             });
         }
