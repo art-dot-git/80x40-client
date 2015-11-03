@@ -103,7 +103,7 @@ const getUpdatedBranch = (branchName, cloneUrl, cloneBranch, k) =>
             k(err);
         } else {
             console.log("Checking out", branchName, cloneUrl, cloneBranch);
-            simpleGit._run(['checkout', '-b', branchName, 'master'], (err) => {
+            simpleGit._run(['checkout', '-B', branchName, 'master'], (err) => {
                 console.log("Checked out", branchName, cloneUrl, cloneBranch);
 
                 if (err) {
