@@ -84,7 +84,7 @@ webhookHandler.on('pull_request', (event) => {
         },
         () => {
             console.error("Timeout");
-        }));
+        });
 });
 
 console.log("Listening for webhook events on port", port);
