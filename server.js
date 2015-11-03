@@ -10,32 +10,10 @@ const seqqueue = require('seq-queue');
 
 const config = require('./config');
 
+// Pull request actions to process
+const pullRequestActions = ['opened', 'synchronize'];
+
 const taskQueue = seqqueue.createQueue(30000);
-
-
-var addToQueue = (() => {
-    let isRunning = false;
-    let queue = [];
-    
-    const processNext = (k) => {
-        const first = queue.shift();
-        isRunning = true;
-        first(() => {
-            isRunning = false;
-            k();
-        });
-    };
-    
-    const process = () => {
-        if (!isRunning && queue.length > 0)
-            processNext(process);
-    };
-    
-    return (k) => {
-        queue.push(k);
-        process();
-    };
-})();
 
 program
     .version('0.0.0')
@@ -66,7 +44,7 @@ const webhookHandler = require('github-webhook-handler')({
 
 webhookHandler.on('pull_request', (event) => {
     const action = event.payload.action;
-    if (action !== 'opened' && action !== 'synchronize') {
+    if (pullRequestActions.indexOf(action) === -1) {
         console.log('ignoring action', action);
         return;
     }
