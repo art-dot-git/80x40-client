@@ -160,7 +160,6 @@ const tryMergePullRequest = (request, f) => {
                         return f(err, data);
                     });
                 }));
-            });
         });
     });
 };
