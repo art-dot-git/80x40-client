@@ -97,7 +97,7 @@ const cleanUpBranch = (branchName, k) =>
 /**
     Attempt to update a branch with the latest changes.
 */
-const getUpdatedBranch = (branchName, otherCloneUrl, k) =>
+const getUpdatedBranch = (branchName, cloneUrl, k) =>
     forceCheckout('master', err => {
         if (err) {
             k(err);
@@ -106,7 +106,7 @@ const getUpdatedBranch = (branchName, otherCloneUrl, k) =>
                 if (err) {
                     k(err);
                 } else { 
-                    simpleGit.pull(otherCloneUrl, otherBranch, k);
+                    simpleGit._run(['pull', cloneUrl, branchName], k);
                 }
             });
         }
