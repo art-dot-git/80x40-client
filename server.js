@@ -6,7 +6,12 @@ const GitHubApi = require("github");
 const program = require("commander");
 const http = require('http');
 const main = require('./pull_request');
+const seqqueue = require('seq-queue');
+
 const config = require('./config');
+
+const taskQueue = seqqueue.createQueue(30000);
+
 
 var addToQueue = (() => {
     let isRunning = false;
@@ -65,7 +70,7 @@ webhookHandler.on('pull_request', (event) => {
         console.log('ignoring action', action);
         return;
     }
-    addToQueue((k) => {
+    taskQueue.push((task) => {
         main.handlePullRequest(github, config.user, config.repo,
             event.payload.number,
             (err) => {
@@ -74,9 +79,12 @@ webhookHandler.on('pull_request', (event) => {
                 } else {
                     console.log("OK");
                 }
-                k();
+                task.done();
             })
-        });
+        },
+        () => {
+            console.error("Timeout");
+        }));
 });
 
 console.log("Listening for webhook events on port", port);
