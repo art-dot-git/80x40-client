@@ -11,7 +11,6 @@ const simpleGit = require('simple-git')(pathToRepo);
 const POST_COMMENTS = true;
 
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
-console.log(LINE_REGEXP);
 
 const REPO_URL = `https://github.com/${config.user}/${config.repo}`;
 const ABOUT_URL = `${REPO_URL}/blob/master/about.md`;
@@ -142,6 +141,9 @@ const tryMergeBranch = (branchName, k) =>
 /**
 */
 const tryMergePullRequest = (request, f) => {
+    if (!request || !request.head || !request.head.repo)
+        return f("Error getting pull request");
+    
     const otherCloneUrl = request.head.repo.clone_url;
     const otherBranch = request.head.ref;    
     const sha = request.head.sha;
