@@ -35,7 +35,7 @@ try:
     with open(sys.argv[2], 'w') as f:
         f.write(block.merge_to_string(merged))
 
-    sys.exit(1)
+    sys.exit(0)
 except StandardError as e:
     print(e)
     sys.exit(1)
