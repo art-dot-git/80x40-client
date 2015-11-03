@@ -22,6 +22,7 @@ other = open_array_file(sys.argv[3])
 
 if not block.is_good(other):
     print("Merge failed. New block is not valid.")
+    sys.stdout.flush()
     sys.exit(1)
 
 try:
@@ -30,12 +31,15 @@ try:
     
     if not block.is_good(merged):
         print("Merge failed. Merged block is not valid.")
+        sys.stdout.flush()
         sys.exit(1)
     
     with open(sys.argv[2], 'w') as f:
         f.write(block.merge_to_string(merged))
     print("Merge OK.", e)
+    sys.stdout.flush()
     sys.exit(0)
 except Exception as e:
     print("Merge failed.", e)
+    sys.stdout.flush()
     sys.exit(1)
