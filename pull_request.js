@@ -13,6 +13,7 @@ const POST_COMMENTS = true;
 const LINE_REGEXP = new RegExp('^[' + escapeRegexp(config.allowed_chars) +']{' + config.expected_width + '}$');
 
 const REPO_URL = `https://github.com/${config.user}/${config.repo}`;
+const ABOUT_URL = `${REPO_URL}/blob/master/about.md`;
 
 /**
     Validate that a block of text is correctly formatted.  
@@ -61,7 +62,7 @@ const verifyBranchMerge = (instance, branchName, f) => {
         
         const files = data.trim();
         if (files !== config.file_name && files.length !== 0) {
-            return f("Change must only touch README. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).", null);
+            return f("Change must only touch README. [See guidelines](${ABOUT_URL}).", null);
         }
         simpleGit._run(['show', branchName + ':' + config.file_name], (err, data) => {
             console.log("Post verify show", branchName, err);
@@ -69,25 +70,62 @@ const verifyBranchMerge = (instance, branchName, f) => {
             if (!err && isTextBlockGood(data)) {
                 return f(null)
             } else {
-                return f("Text block is invalid. [See guidelines](https://github.com/art-dot-git/80x40/blob/master/about.md).");
+                return f("Text block is invalid. [See guidelines](${ABOUT_URL}).");
             }
         });
     });
-}
+};
 
-const forceCheckoutMaster = (k) =>
-    simpleGit._run(['checkout', '-f', 'master'], k);
+/**
+    Force switch to the master branch.
+*/
+const forceCheckout = (branch, k) =>
+    simpleGit._run(['checkout', '-f', branch], k);
 
+/**
+    Attempt to clean up a bad branch.
+*/
 const cleanUpBranch = (branchName, k) =>
-    simpleGit
-        .checkout('HEAD^')
-        ._run(['checkout', '-f', 'master'], (err, data) => {
-            if (err) {
-                return k(err);
-            } else {
-                return deleteBranch(branchName, k);
-            }
-        });
+    forceCheckout('master', err => {
+        if (err) {
+            k(err);
+        } else {
+            deleteBranch(branchName, k);
+        }
+    });
+
+/**
+    Attempt to update a branch with the latest changes.
+*/
+const getUpdatedBranch = (branchName, otherCloneUrl, k) =>
+    forceCheckout('master', err => {
+        if (err) {
+            k(err);
+        } else {
+            simpleGit._run(['checkout', '-f', '-B', branchName], (err) => {
+                if (err) {
+                    k(err);
+                } else { 
+                    simpleGit.pull(otherCloneUrl, otherBranch, k);
+                }
+            });
+        }
+    });
+
+/**
+*/
+const tryMergeBranch = (branchName, k) => 
+    verifyBranchMerge(simpleGit, branchName, (err, data) => {
+        console.log("Pre merge", err);
+        if (err) {
+            return f(err);
+        } else {
+            return simpleGit._run(['merge', '-m "Automerge: ' + branchName + '"', branchName], (err, data) => {
+                console.log("Post merge", err);
+                f(err, data);
+            });
+        }
+    });
 
 /**
 */
@@ -102,38 +140,29 @@ const tryMergePullRequest = (request, f) => {
     if (!otherBranch.match(/^[a-z0-9\-_]+$/i)) {
         return f("Invalid branch name");
     }
-    return forceCheckoutMaster(x => 
-        simpleGit._run(['checkout', '-B', branchName], (err, data) => {
+    
+    return getUpdatedBranch(err => {
         if (err) {
             return f(err);
         }
-        return verifyBranchMerge(
-            simpleGit
-                .pull(otherCloneUrl, otherBranch)
-                .checkout('master'),
-            branchName,
-            function(err, data) {
-                console.log("pre merge", err);
-                if (err) {
-                    return cleanUpBranch(branchName, _ => f(err));
-                }
-            
-                return simpleGit._run(['merge', '-m "Automerge: ' + sha + '"', 'master', branchName], function(err, data) {
-                console.log("post merge", err);
-
-                return cleanUpBranch(branchName, _ => {
-                    console.log("pre push", err);
+        forceCheckout('master', err => {
+            if (err) {
+                return f(err);
+            }
+            tryMergeBranch(branchName, (err) =>
+                cleanUpBranch(branchName, () => {
                     if (err) {
                         return f(err);
                     }
+                    console.log("Pre push", err);
                     return simpleGit.push('origin', 'master', (err, data) => {
                         console.log("post push", err);
                         return f(err, data);
-                    })
-                });
+                    });
+                }));
             });
         });
-    }));
+    });
 };
 
 /**
