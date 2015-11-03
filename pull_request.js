@@ -149,7 +149,9 @@ const tryMergePullRequest = (request, f) => {
         if (err) {
             return f(err);
         }
+        console.log("Pre verify");
         forceCheckout('master', err => {
+            console.log("Post verify", err);
             if (err) {
                 return f(err);
             }
