@@ -14,14 +14,14 @@ def is_good(block):
 def get_difference(one, two):
     """Compute the differences between two blocks."""
     if len(one) != len(two):
-        raise StandardError("blocks are of different dimensions")
+        raise Exception("blocks are of different dimensions")
     
     diffs = []
     for y in range(len(one)):
         line1 = one[y]
         line2 = two[y]
         if len(line1) != len(line2):
-            raise StandardError("blocks are of different dimensions")
+            raise Exception("blocks are of different dimensions")
         
         for x in range(len(line1)):
             c1 = line1[x]

@@ -36,6 +36,6 @@ try:
         f.write(block.merge_to_string(merged))
     print("Merge OK.", e)
     sys.exit(0)
-except StandardError as e:
+except Exception as e:
     print("Merge failed.", e)
     sys.exit(1)
