@@ -97,13 +97,13 @@ const cleanUpBranch = (branchName, k) =>
 /**
     Attempt to update a branch with the latest changes.
 */
-const getUpdatedBranch = (branchName, cloneUrl, k) =>
+const getUpdatedBranch = (branchName, cloneUrl, cloneBranch, k) =>
     forceCheckout('master', err => {
         if (err) {
             k(err);
         } else {
             console.log("Checking out", branchName, cloneUrl);
-            simpleGit._run(['checkout', '-B', branchName], (err) => {
+            simpleGit._run(['checkout', '-f', '-B', branchName], (err) => {
                 console.log("Checked out", branchName, cloneUrl);
 
                 if (err) {
@@ -144,7 +144,7 @@ const tryMergePullRequest = (request, f) => {
         return f("Invalid branch name");
     }
     
-    return getUpdatedBranch(branchName, otherCloneUrl, err => {
+    return getUpdatedBranch(branchName, otherCloneUrl, otherBranch, err => {
         if (err) {
             return f(err);
         }
