@@ -194,50 +194,25 @@ const processPullRequest = (github, request, k) =>
     });
 
 /**
-    Process a set of pull requests in order.
-*/
-const processPullRequests = (github, requests, k) => {
-    if (requests.length === 0)
-        return k(null);
-    
-    processPullRequest(github, requests[0], (err, data) => {
-        const rest = requests.slice(1);
-        return processPullRequests(github, rest, err ? _ => k(err) : k);
-    });
-};
-
-/**
-    Attempt to handle all pull requests in a repo in order.
-*/
-const handleAllPullRequests = (github, user, repo, k) =>
-    github.pullRequests.getAll({
-        user: user,
-        repo: repo,
-        sort: 'updated',
-        direction: 'desc'
-    }, function(err, response) {
-        if (err)
-            return k(err);
-        return processPullRequests(github, response, k);
-    });
-
-/**
     Attempt to handle a single pull request.
 */
-const handlePullRequest = (github, user, repo, number, k) =>
+const handlePullRequest = (github, user, repo, number, k, noRetry) =>
     github.pullRequests.get({
         user: user,
         repo: repo,
         number: number
     }, (err, pullRequest) => {
-        if (err)
-            return k(err);
-        return processPullRequest(github, pullRequest, k);
+        if (err) {
+            console.log("Error getting pull request", err);
+            if (noRetry)
+                return k(err);
+            return handlePullRequest(github, user, repo, number, k, true);
+        } else {
+            return processPullRequest(github, pullRequest, k);
+        }
     });
 
 
-module.exports = {
-    handleAllPullRequests: handleAllPullRequests,
-    
+module.exports = {    
     handlePullRequest: handlePullRequest
 };
