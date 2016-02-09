@@ -62,7 +62,7 @@ const verifyBranchMerge = (instance, branchName, f) => {
         
         const files = data.trim();
         if (files !== config.file_name && files.length !== 0) {
-            return f("Change must only touch README. [See guidelines](${ABOUT_URL}).", null);
+            return f(`Change must only touch README. [See guidelines](${ABOUT_URL}).`, null);
         }
         simpleGit._run(['show', branchName + ':' + config.file_name], (err, data) => {
             console.log("Post verify show", branchName, err);
@@ -70,7 +70,7 @@ const verifyBranchMerge = (instance, branchName, f) => {
             if (!err && isTextBlockGood(data)) {
                 return f(null)
             } else {
-                return f("Text block is invalid. [See guidelines](${ABOUT_URL}).");
+                return f(`Text block is invalid. [See guidelines](${ABOUT_URL}).`);
             }
         });
     });
